@@ -4,7 +4,7 @@ import json
 from streamlit_lottie import st_lottie
 from google.cloud import bigquery
 from google.oauth2 import service_account
-from pathlib import path
+from pathlib import Path
 
 #DISPOSICION
 st.set_page_config(
