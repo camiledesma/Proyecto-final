@@ -3,6 +3,7 @@ streamlit
 streamlit_lottie
 streamlit-option-menu
 pyarrow
+db-dtypes
 google-cloud-bigquery
 google-oauth
 pathlib
