@@ -213,16 +213,20 @@ if selected=="Predicción":
 
     def consultar_modelo_ml(client, columnas_select):
         QUERY = (
-        'SELECT * FROM ML.PREDICT(MODEL `modelo_knn.modelo_clusterizacion`, '
-        '(SELECT ' + columnas_select + '))'
+            'SELECT * FROM ML.PREDICT(MODEL `modelo_knn.modelo_clusterizacion`, '
+            '(SELECT ' + columnas_select + '))'
         )
 
-        st.write(QUERY)
-        
-        # Necesario instalar en modulo pandas para bq
-        # pip install google-cloud-bigquery[pandas]
-        prediccion = client.query_and_wait(QUERY).to_dataframe()
-        return prediccion
+        try:
+            # Necesario instalar en modulo pandas para bq
+            # pip install google-cloud-bigquery[pandas]
+            prediccion = client.query_and_wait(QUERY).to_dataframe()
+            return prediccion
+        except GoogleCloudError as e:
+            print(f"Error de Google Cloud al ejecutar la consulta en BigQuery: {e}")
+            # Puedes realizar acciones adicionales aquí, como registrar el error o manejarlo de manera específica
+            # raise  # Propaga la excepción si es necesario
+            return None  # Otra opción: devolver un valor específico para indicar que hubo un error
     
     def obtener_centroides(prediccion):
         # Utiliza apply para convertir los arrays de NumPy a listas y luego aplica json.loads
