@@ -4,6 +4,8 @@ import json
 from streamlit_lottie import st_lottie
 from google.cloud import bigquery
 from google.oauth2 import service_account
+from pathlib import path
+
 #DISPOSICION
 st.set_page_config(
     page_title="OptiLocation",
@@ -26,7 +28,7 @@ def load_lottiefile(filepath: str):
 #Lectura del big query
 def instanciar_client():
     # Ruta al archivo JSON de la clave de la cuenta de servicio
-    credentials_path = '\webOptiLocation\starlit-woods-407516-5b54cca76454.json'
+    credentials_path = Path(__file__).parent / 'webOptiLocation/starlit-woods-407516-5b54cca76454.json'
     # Configura las credenciales para acceder a BigQuery
     credentials = service_account.Credentials.from_service_account_file(
         credentials_path,
