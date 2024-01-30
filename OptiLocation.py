@@ -68,7 +68,7 @@ def obtener_columnas(client):
         'FROM `starlit-woods-407516.modelo_knn.INFORMATION_SCHEMA.COLUMNS` '
         'WHERE TABLE_NAME = "restaurantes_ml_std"'
     )
-
+    
     query_job = client.query(QUERY)
     result = query_job.result()
 
@@ -217,6 +217,8 @@ if selected=="Predicción":
         '(SELECT ' + columnas_select + '))'
         )
 
+        st.write(QUERY)
+        
         # Necesario instalar en modulo pandas para bq
         # pip install google-cloud-bigquery[pandas]
         prediccion = client.query_and_wait(QUERY).to_dataframe()
