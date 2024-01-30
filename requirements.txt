@@ -5,3 +5,4 @@ streamlit-option-menu
 pyarrow
 google-cloud-bigquery
 google-oauth
+path
