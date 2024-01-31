@@ -224,7 +224,7 @@ if selected=="Predicción":
         )
         
         try:
-            # Necesario instalar en modulo pandas para bq
+            # Necesario instalar el modulo pandas para bq
             # pip install google-cloud-bigquery[pandas]
             prediccion = client.query_and_wait(QUERY).to_dataframe()
             return prediccion
@@ -264,8 +264,7 @@ if selected=="Predicción":
         centroide = client.query_and_wait(QUERY).to_dataframe()
 
         return centroide.values[0]
-    
-        # Deberia ir en el main
+
 
     cliente_bq = instanciar_client()
     df_estandarizar = obtener_avg_stddev(cliente_bq)
