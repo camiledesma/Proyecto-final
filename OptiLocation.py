@@ -172,7 +172,7 @@ if selected=="Predicción":
     for elemento in elementos_a_excluir:
         if elemento in Categorias_options:
             del Categorias_options[elemento]
-    selected_categories = st.multiselect('Selecciona Categorias', options = ['Categorias'] + list(Categorias_options.keys()), default=['Categorias'])
+    selected_categories = st.multiselect('Selecciona Categorias', options = list(Categorias_options.keys()))
     st.caption('Nota: Se puede elegir varias categorias')
 
 
@@ -191,6 +191,9 @@ if selected=="Predicción":
 
         Rating_select = (Rating_select - df_avg_stddev["avg_rating_avg"].values[0])/df_avg_stddev["avg_rating_stddev"].values[0]
         Densidad_Sitios_select = (Densidad_Sitios_select - df_avg_stddev["num_sitios_avg"].values[0])/df_avg_stddev["num_sitios_stddev"].values[0]
+
+        st.write(Rating_select)
+        st.write(Densidad_Sitios_select)
         
         return Rating_select, Densidad_Sitios_select
 
