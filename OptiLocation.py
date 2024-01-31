@@ -176,11 +176,6 @@ if selected=="Predicción":
 
 
     def estandarizar(df_avg_stddev, Rating_select, Densidad_Sitios_select):
-
-        st.write(type(Rating_select))
-        st.write(Rating_select)
-        st.write(type(Densidad_Sitios_select))
-        st.write(Densidad_Sitios_select)
         
         if Densidad_Sitios_select == 1:
             Densidad_Sitios_select = 20
@@ -193,9 +188,6 @@ if selected=="Predicción":
         else:
             Densidad_Sitios_select = 50
 
-        st.write(df_avg_stddev["avg_rating_avg"].values[0])
-        st.write(df_avg_stddev["avg_rating_stddev"].values[0])
-        
         Rating_select = (Rating_select - df_avg_stddev["avg_rating_avg"].values[0])/df_avg_stddev["avg_rating_stddev"].values[0]
         Densidad_Sitios_select = (Densidad_Sitios_select - df_avg_stddev["num_sitios_avg"].values[0])/df_avg_stddev["num_sitios_stddev"].values[0]
         
@@ -227,14 +219,13 @@ if selected=="Predicción":
             'SELECT * FROM ML.PREDICT(MODEL `modelo_knn.modelo_clusterizacion`, '
             '(SELECT ' + columnas_select + '))'
         )
-
-        st.write(QUERY)
         
         try:
             # Necesario instalar en modulo pandas para bq
             # pip install google-cloud-bigquery[pandas]
             prediccion = client.query_and_wait(QUERY).to_dataframe()
             return prediccion
+            
         except GoogleCloudError as e:
             st.error(f"Error de Google Cloud al ejecutar la consulta en BigQuery: {e}")
             # Puedes realizar acciones adicionales aquí, como registrar el error o manejarlo de manera específica
@@ -258,7 +249,10 @@ if selected=="Predicción":
         # Elimino clusters duplicados
         clusters = list(dict.fromkeys(clusters))
 
-        return clusters[0]
+        if clusters:
+            return clusters[0]
+        else:
+            st.write(clusters)
     
     def ubicacion_recomendacion(client, num_cluster):
         QUERY = (
