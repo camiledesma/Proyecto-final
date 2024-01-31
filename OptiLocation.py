@@ -281,19 +281,17 @@ if selected=="Predicción":
     
     # String en formato WKT (Well-Known Text)
     wkt_string = Ubicacion[0]
-    st.write(wkt_string)
+
     # Parsear el string WKT
     punto = loads(wkt_string)
-    st.write(punto)
-    st.write(type(punto))
-    st.write(punto.x)
+  
     # Crear un DataFrame de Pandas con una única fila y dos columnas (latitud y longitud)
     df = pd.DataFrame({"Latitude": [punto.y], "Longitude": [punto.x]})
     
     # Mostrar el punto en el mapa
     st.map(df, latitude = "Latitude", longitude = "Longitude")
     
-    st.write('Prediccion:', Ubicacion)
+    st.write('Cluster recomendado:\n' + "Estado: " + Ubicacion[1])
 
 #About Page
 if selected=='Acerca de':
