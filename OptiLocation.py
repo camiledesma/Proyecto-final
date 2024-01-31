@@ -5,6 +5,7 @@ from streamlit_lottie import st_lottie
 from google.cloud import bigquery
 from google.oauth2 import service_account
 from pathlib import Path
+from shapely.wkt import loads
 
 #DISPOSICION
 st.set_page_config(
@@ -273,10 +274,22 @@ if selected=="Predicción":
     prediccion = consultar_modelo_ml(cliente_bq, columnas_select)
     centroides = obtener_centroides(prediccion)
     num_cluster = cluster_mas_recomendado(cliente_bq, centroides)
-
+    
     # Obtener ubicacion del cluster recomendado
     Ubicacion = ubicacion_recomendacion(cliente_bq, num_cluster)
 
+    # String en formato WKT (Well-Known Text)
+    wkt_string = Ubicacion.values[0]
+    
+    # Parsear el string WKT
+    punto = loads(wkt_string)
+    
+    # Obtener la longitud y la latitud
+    longitud, latitud = punto.x, punto.y
+    
+    # Mostrar un mapa con la ubicación recomendada
+    st.map(latitud, longitud)
+    
     st.write('Prediccion:', Ubicacion)
 
 #About Page
