@@ -284,6 +284,8 @@ if selected=="Predicción":
     # Parsear el string WKT
     punto = loads(wkt_string)
     st.write(punto)
+    st.write(type(punto.x))
+    st.write(punto.x)
     # Crear un DataFrame de Pandas con una única fila y dos columnas (latitud y longitud)
     df = pd.DataFrame({"Latitude": punto.y, "Longitude": punto.x})
     
