@@ -191,12 +191,6 @@ if selected=="Predicción":
 
         Rating_select = (Rating_select - df_avg_stddev["avg_rating_avg"].values[0])/df_avg_stddev["avg_rating_stddev"].values[0]
         Densidad_Sitios_select = (Densidad_Sitios_select - df_avg_stddev["num_sitios_avg"].values[0])/df_avg_stddev["num_sitios_stddev"].values[0]
-
-        st.write(Rating_select)
-        st.write(df_avg_stddev["avg_rating_avg"].values[0])
-        
-        st.write(Densidad_Sitios_select)
-        st.write(df_avg_stddev["num_sitios_avg"].values[0])
         
         return Rating_select, Densidad_Sitios_select
 
