@@ -147,6 +147,7 @@ if selected=="Predicción":
     # REALIZA LA NORMALIZACION Y LIMPIEZA DE LOS DATAFRAMES
     States = obtener_states(client)
     loc_select=st.radio('Type',['Estados'],horizontal=True, label_visibility="collapsed")
+    estado_select = "California"
     if loc_select=='Estados':
         estado_select=st.selectbox(label='Estados',options=['Estados']+States,label_visibility='collapsed')
         
