@@ -152,14 +152,16 @@ if selected=="Predicción":
         
     Rating_options = [4, 4.5, 5]
     Rating = st.radio('Type', ['Rating'], horizontal=True, label_visibility="collapsed")
+    Rating_select = 4.0
     if Rating == 'Rating':
-        Rating_select = st.selectbox(label='Rating', options=['Rating'] + [str(option) for option in Rating_options], label_visibility='collapsed')
+        Rating_select = float(st.selectbox(label='Rating', options=['Rating'] + [str(option) for option in Rating_options], label_visibility='collapsed'))
         st.caption('Nota: 4 = Bueno, 4.5 = Muy Bueno, 5 = Exelente')
 
     Densidad_Opcion = [1,2,3,4]
     Densidad_Sitios=st.radio('Type',['Densidad_Sitios'],horizontal=True, label_visibility="collapsed")
+    Densidad_Sitios_select = 0.0
     if Densidad_Sitios=='Densidad_Sitios':
-        Densidad_Sitios_select=st.selectbox(label='Densidad_Sitios',options=['Densidad_Sitios']+ [str(option) for option in Densidad_Opcion] ,label_visibility='collapsed')
+        Densidad_Sitios_select = float(st.selectbox(label='Densidad_Sitios',options=['Densidad_Sitios']+ [str(option) for option in Densidad_Opcion] ,label_visibility='collapsed'))
         st.caption('Nota: 1 = Baja, 2 = Media, 3 = Alta, 4 = Muy Alta')
 
     # Elementos a excluir
