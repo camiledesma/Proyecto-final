@@ -162,7 +162,7 @@ if selected=="Predicción":
     Densidad_Sitios=st.radio('Type',['Densidad_Sitios'],horizontal=True, label_visibility="collapsed")
     Densidad_Sitios_select = 0.0
     if Densidad_Sitios=='Densidad_Sitios':
-        Densidad_Sitios_select = float(st.selectbox(label='Densidad_Sitios',options = [str(option) for option in Densidad_Opcion] ,label_visibility='collapsed'))
+        Densidad_Sitios_select = int(st.selectbox(label='Densidad_Sitios',options = [str(option) for option in Densidad_Opcion] ,label_visibility='collapsed'))
         st.caption('Nota: 1 = Baja, 2 = Media, 3 = Alta, 4 = Muy Alta')
 
     # Elementos a excluir
