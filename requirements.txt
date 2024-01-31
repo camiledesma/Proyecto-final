@@ -10,3 +10,4 @@ google-oauth
 pathlib
 pandas
 numpy
+shapely
