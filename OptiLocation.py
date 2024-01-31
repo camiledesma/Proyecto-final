@@ -288,7 +288,7 @@ if selected=="Predicción":
     df = pd.DataFrame({"Latitude": [punto.y], "Longitude": [punto.x]})
     
     # Mostrar el punto en el mapa
-    st.map(df)
+    st.map(df, latitude = "Latitude", longitude = "Longitude")
     
     st.write('Prediccion:', Ubicacion)
 
