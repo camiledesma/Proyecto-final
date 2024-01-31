@@ -291,7 +291,10 @@ if selected=="Predicción":
     # Mostrar el punto en el mapa
     st.map(df, latitude = "Latitude", longitude = "Longitude")
     
-    st.write("Cluster recomendado: \n", "  ", "Estado: ", Ubicacion[1], "\n", "Numero de sitios cercanos: ", Ubicacion[2])
+    st.markdown("<h2>Cluster recomendado:</h2>", unsafe_allow_html=True)
+    st.write("Estado: ", Ubicacion[1])
+    st.write("Número de sitios cercanos: ", Ubicacion[2])
+    st.write("Puntaje promedio de los sitios: ", Ubicacion[3])
 
 #About Page
 if selected=='Acerca de':
