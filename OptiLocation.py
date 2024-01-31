@@ -280,10 +280,10 @@ if selected=="Predicción":
     
     # String en formato WKT (Well-Known Text)
     wkt_string = Ubicacion[0]
-    
+    st.write(wkt_string)
     # Parsear el string WKT
     punto = loads(wkt_string)
-    
+    st.write(punto)
     # Crear un DataFrame de Pandas con una única fila y dos columnas (latitud y longitud)
     df = pd.DataFrame({"Latitude": [punto.y], "Longitude": [punto.x]})
     
