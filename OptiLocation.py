@@ -283,12 +283,12 @@ if selected=="Predicción":
     
     # Parsear el string WKT
     punto = loads(wkt_string)
-
-    # Crear una lista de puntos con una única coordenada
-    punto = [punto]
+    
+    # Crear un DataFrame de Pandas con una única fila y dos columnas (latitud y longitud)
+    df = pd.DataFrame({"Latitude": [punto.y], "Longitude": [punto.x]})
     
     # Mostrar el punto en el mapa
-    st.map(punto)
+    st.map(df)
     
     st.write('Prediccion:', Ubicacion)
 
