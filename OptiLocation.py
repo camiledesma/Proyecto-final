@@ -292,9 +292,9 @@ if selected=="Predicción":
     st.map(df, latitude = "Latitude", longitude = "Longitude")
     
     st.markdown("<h2>Cluster recomendado:</h2>", unsafe_allow_html=True)
-    st.write("Estado: ", Ubicacion[1])
-    st.write("Número de sitios cercanos: ", Ubicacion[2])
-    st.write("Puntaje promedio de los sitios: ", Ubicacion[3])
+    st.write(f"Estado: {Ubicacion[1]}")
+    st.write(f"Número de sitios cercanos: {Ubicacion[2]}")
+    st.write(f"Puntaje promedio de los sitios: {round(Ubicacion[3], 2)}")
 
 #About Page
 if selected=='Acerca de':
