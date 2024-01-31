@@ -244,6 +244,8 @@ if selected=="Predicción":
         'ORDER BY avg_rating DESC'
         )
 
+        st.write(QUERY)
+        
         clusters = client.query_and_wait(QUERY).to_dataframe()
         clusters = clusters["cluster_id"].tolist()
         # Elimino clusters duplicados
