@@ -1,7 +1,0 @@
-markdownify
-streamlit
-streamlit_lottie
-streamlit_option_menu
-pyarrow
-google-cloud-bigquery
-google-oauth

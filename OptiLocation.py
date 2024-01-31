@@ -4,6 +4,10 @@ import json
 from streamlit_lottie import st_lottie
 from google.cloud import bigquery
 from google.oauth2 import service_account
+import pandas as pd
+from pathlib import Path
+from shapely.wkt import loads
+
 #DISPOSICION
 st.set_page_config(
     page_title="OptiLocation",
@@ -26,7 +30,7 @@ def load_lottiefile(filepath: str):
 #Lectura del big query
 def instanciar_client():
     # Ruta al archivo JSON de la clave de la cuenta de servicio
-    credentials_path = 'webOptiLocation\starlit-woods-407516-5b54cca76454.json'
+    credentials_path = Path(__file__).parent / 'webOptiLocation/starlit-woods-407516-5b54cca76454.json'
     # Configura las credenciales para acceder a BigQuery
     credentials = service_account.Credentials.from_service_account_file(
         credentials_path,
@@ -66,7 +70,7 @@ def obtener_columnas(client):
         'FROM `starlit-woods-407516.modelo_knn.INFORMATION_SCHEMA.COLUMNS` '
         'WHERE TABLE_NAME = "restaurantes_ml_std"'
     )
-
+    
     query_job = client.query(QUERY)
     result = query_job.result()
 
@@ -107,7 +111,7 @@ with st.sidebar:
 if selected=="Introducción":
     #Encabezado
     st.title('Bienvenido a OptiLocation')
-    st.subheader('*Una herramienta nueva para poder realizar la predicción de donde puede aperturar un nuevo local*')
+    st.subheader('*La de herramienta que te asistirá sobre la locación de tu nuevo local*')
 
     st.divider()
 
@@ -118,9 +122,9 @@ if selected=="Introducción":
             st.header('Casos de uso')
             st.markdown(
                 """
-                - _¿Realiza investigaciones de mercado para la expacion de franquicias?_
-                - _¿Quiere aperturar una nueva sucursal, pero no sabe donde?_
-                - _¿Desea apeturar un local pero tiene miedo a que no tenga una ubicacion estrategica?_
+                - _¿Realiza investigaciones de mercado para la expansión de franquicias?_
+                - _¿Quiere aperturar un nuevo local pero no sabe dónde?_
+                - _¿Desea abrir un local pero tiene incertidumbre sobre si es o no una ubicacion estratégica?_
 
                 """
                 )
@@ -145,19 +149,22 @@ if selected=="Predicción":
     # REALIZA LA NORMALIZACION Y LIMPIEZA DE LOS DATAFRAMES
     States = obtener_states(client)
     loc_select=st.radio('Type',['Estados'],horizontal=True, label_visibility="collapsed")
+    estado_select = "California"
     if loc_select=='Estados':
-        estado_select=st.selectbox(label='Estados',options=['Estados']+States,label_visibility='collapsed')
+        estado_select=st.selectbox(label='Estados',options = States,label_visibility='collapsed')
         
     Rating_options = [4, 4.5, 5]
     Rating = st.radio('Type', ['Rating'], horizontal=True, label_visibility="collapsed")
+    Rating_select = 4.0
     if Rating == 'Rating':
-        Rating_select = st.selectbox(label='Rating', options=['Rating'] + [str(option) for option in Rating_options], label_visibility='collapsed')
+        Rating_select = float(st.selectbox(label='Rating', options = [str(option) for option in Rating_options], label_visibility='collapsed'))
         st.caption('Nota: 4 = Bueno, 4.5 = Muy Bueno, 5 = Exelente')
 
     Densidad_Opcion = [1,2,3,4]
     Densidad_Sitios=st.radio('Type',['Densidad_Sitios'],horizontal=True, label_visibility="collapsed")
+    Densidad_Sitios_select = 0.0
     if Densidad_Sitios=='Densidad_Sitios':
-        Densidad_Sitios_select=st.selectbox(label='Densidad_Sitios',options=['Densidad_Sitios']+ [str(option) for option in Densidad_Opcion] ,label_visibility='collapsed')
+        Densidad_Sitios_select = int(st.selectbox(label='Densidad_Sitios',options = [str(option) for option in Densidad_Opcion] ,label_visibility='collapsed'))
         st.caption('Nota: 1 = Baja, 2 = Media, 3 = Alta, 4 = Muy Alta')
 
     # Elementos a excluir
@@ -167,25 +174,26 @@ if selected=="Predicción":
     for elemento in elementos_a_excluir:
         if elemento in Categorias_options:
             del Categorias_options[elemento]
-    selected_categories = st.multiselect('Selecciona Categorias', options = ['Categorias'] + list(Categorias_options.keys()), default=['Categorias'])
+    selected_categories = st.multiselect('Selecciona Categorias', options = list(Categorias_options.keys()))
     st.caption('Nota: Se puede elegir varias categorias')
 
 
     def estandarizar(df_avg_stddev, Rating_select, Densidad_Sitios_select):
+        
         if Densidad_Sitios_select == 1:
-            Densidad_Sitios_select = 20
+            Densidad_Sitios_select = 100
         elif Densidad_Sitios_select == 2:
-            Densidad_Sitios_select = 80
-        elif Densidad_Sitios_select == 3:
-            Densidad_Sitios_select = 200
-        elif Densidad_Sitios_select == 4:
             Densidad_Sitios_select = 500
+        elif Densidad_Sitios_select == 3:
+            Densidad_Sitios_select = 1500
+        elif Densidad_Sitios_select == 4:
+            Densidad_Sitios_select = 3000
         else:
-            Densidad_Sitios_select = 50
-        Rating_select = (Rating_select - df_avg_stddev["avg_rating_avg"])/df_avg_stddev["avg_rating_stddev"]
-        Densidad_Sitios_select = (Densidad_Sitios_select - df_avg_stddev["num_sitios_avg"])/df_avg_stddev["num_sitios_stddev"]
+            Densidad_Sitios_select = 250
+
         Rating_select = (Rating_select - df_avg_stddev["avg_rating_avg"].values[0])/df_avg_stddev["avg_rating_stddev"].values[0]
         Densidad_Sitios_select = (Densidad_Sitios_select - df_avg_stddev["num_sitios_avg"].values[0])/df_avg_stddev["num_sitios_stddev"].values[0]
+        
         return Rating_select, Densidad_Sitios_select
 
 
@@ -211,14 +219,21 @@ if selected=="Predicción":
 
     def consultar_modelo_ml(client, columnas_select):
         QUERY = (
-        'SELECT * FROM ML.PREDICT(MODEL `modelo_knn.modelo_clusterizacion`, '
-        '(SELECT ' + columnas_select + '))'
+            'SELECT * FROM ML.PREDICT(MODEL `modelo_knn.modelo_clusterizacion`, '
+            '(SELECT ' + columnas_select + '))'
         )
-
-        # Necesario instalar en modulo pandas para bq
-        # pip install google-cloud-bigquery[pandas]
-        prediccion = client.query_and_wait(QUERY).to_dataframe()
-        return prediccion
+        
+        try:
+            # Necesario instalar el modulo pandas para bq
+            # pip install google-cloud-bigquery[pandas]
+            prediccion = client.query_and_wait(QUERY).to_dataframe()
+            return prediccion
+            
+        except GoogleCloudError as e:
+            st.error(f"Error de Google Cloud al ejecutar la consulta en BigQuery: {e}")
+            # Puedes realizar acciones adicionales aquí, como registrar el error o manejarlo de manera específica
+            # raise  # Propaga la excepción si es necesario
+            return None  # Otra opción: devolver un valor específico para indicar que hubo un error
     
     def obtener_centroides(prediccion):
         # Utiliza apply para convertir los arrays de NumPy a listas y luego aplica json.loads
@@ -231,13 +246,14 @@ if selected=="Predicción":
         f'WHERE centroid_id = {centroid_ids[0]} AND state = "{estado_select}" '
         'ORDER BY avg_rating DESC'
         )
-
+        
         clusters = client.query_and_wait(QUERY).to_dataframe()
         clusters = clusters["cluster_id"].tolist()
         # Elimino clusters duplicados
         clusters = list(dict.fromkeys(clusters))
 
-        return clusters[0]
+        if clusters:
+            return clusters[0]
     
     def ubicacion_recomendacion(client, num_cluster):
         QUERY = (
@@ -248,22 +264,36 @@ if selected=="Predicción":
         centroide = client.query_and_wait(QUERY).to_dataframe()
 
         return centroide.values[0]
-    
-        # Deberia ir en el main
+
 
     cliente_bq = instanciar_client()
     df_estandarizar = obtener_avg_stddev(cliente_bq)
-    #Rating_select, Densidad_Sitios_select = estandarizar(df_estandarizar, Rating_select, Densidad_Sitios_select)
+    Rating_select, Densidad_Sitios_select = estandarizar(df_estandarizar, Rating_select, Densidad_Sitios_select)
     columnas_dict = obtener_columnas(cliente_bq)
     columnas_select = cargar_datos(columnas_dict,Rating_select,Densidad_Sitios_select,estado_select,selected_categories)
     prediccion = consultar_modelo_ml(cliente_bq, columnas_select)
     centroides = obtener_centroides(prediccion)
     num_cluster = cluster_mas_recomendado(cliente_bq, centroides)
-
+    
     # Obtener ubicacion del cluster recomendado
     Ubicacion = ubicacion_recomendacion(cliente_bq, num_cluster)
+    
+    # String en formato WKT (Well-Known Text)
+    wkt_string = Ubicacion[0]
 
-    st.write('Prediccion:', Ubicacion)
+    # Parsear el string WKT
+    punto = loads(wkt_string)
+  
+    # Crear un DataFrame de Pandas con una única fila y dos columnas (latitud y longitud)
+    df = pd.DataFrame({"Latitude": [punto.y], "Longitude": [punto.x]})
+    
+    # Mostrar el punto en el mapa
+    st.map(df, latitude = "Latitude", longitude = "Longitude")
+    
+    st.markdown("<h2>Cluster recomendado:</h2>", unsafe_allow_html=True)
+    st.write(f"Estado: {Ubicacion[1]}")
+    st.write(f"Número de sitios cercanos: {Ubicacion[2]}")
+    st.write(f"Puntaje promedio de los sitios: {round(Ubicacion[3], 2)}")
 
 #About Page
 if selected=='Acerca de':
