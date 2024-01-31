@@ -283,12 +283,12 @@ if selected=="Predicción":
     
     # Parsear el string WKT
     punto = loads(wkt_string)
+
+    # Crear una lista de puntos con una única coordenada
+    punto = [punto]
     
-    # Obtener la longitud y la latitud
-    longitud, latitud = punto.x, punto.y
-    
-    # Mostrar un mapa con la ubicación recomendada
-    st.map(latitud, longitud)
+    # Mostrar el punto en el mapa
+    st.map(punto)
     
     st.write('Prediccion:', Ubicacion)
 
