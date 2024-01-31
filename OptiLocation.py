@@ -277,10 +277,9 @@ if selected=="Predicción":
     
     # Obtener ubicacion del cluster recomendado
     Ubicacion = ubicacion_recomendacion(cliente_bq, num_cluster)
-    st.write(Ubicacion)
     
     # String en formato WKT (Well-Known Text)
-    wkt_string = Ubicacion.values[0]
+    wkt_string = Ubicacion[0]
     
     # Parsear el string WKT
     punto = loads(wkt_string)
