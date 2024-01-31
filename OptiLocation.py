@@ -123,7 +123,7 @@ if selected=="Introducción":
             st.markdown(
                 """
                 - _¿Realiza investigaciones de mercado para la expansión de franquicias?_
-                - _¿Quiere aperturar una nuevo local pero no sabe dónde?_
+                - _¿Quiere aperturar un nuevo local pero no sabe dónde?_
                 - _¿Desea abrir un local pero tiene incertidumbre sobre si es o no una ubicacion estratégica?_
 
                 """
