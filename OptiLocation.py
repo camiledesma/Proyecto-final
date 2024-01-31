@@ -111,7 +111,7 @@ with st.sidebar:
 if selected=="Introducción":
     #Encabezado
     st.title('Bienvenido a OptiLocation')
-    st.subheader('*Una herramienta nueva para poder realizar la predicción de donde puede aperturar un nuevo local*')
+    st.subheader('*La de herramienta que te asistirá sobre la locación de tu nuevo local*')
 
     st.divider()
 
@@ -122,9 +122,9 @@ if selected=="Introducción":
             st.header('Casos de uso')
             st.markdown(
                 """
-                - _¿Realiza investigaciones de mercado para la expacion de franquicias?_
-                - _¿Quiere aperturar una nueva sucursal, pero no sabe donde?_
-                - _¿Desea apeturar un local pero tiene miedo a que no tenga una ubicacion estrategica?_
+                - _¿Realiza investigaciones de mercado para la expansión de franquicias?_
+                - _¿Quiere aperturar una nuevo local pero no sabe dónde?_
+                - _¿Desea abrir un local pero tiene incertidumbre sobre si es o no una ubicacion estratégica?_
 
                 """
                 )
