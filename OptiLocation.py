@@ -244,8 +244,6 @@ if selected=="Predicción":
         f'WHERE centroid_id = {centroid_ids[0]} AND state = "{estado_select}" '
         'ORDER BY avg_rating DESC'
         )
-
-        st.write(QUERY)
         
         clusters = client.query_and_wait(QUERY).to_dataframe()
         clusters = clusters["cluster_id"].tolist()
@@ -254,8 +252,6 @@ if selected=="Predicción":
 
         if clusters:
             return clusters[0]
-        else:
-            st.write(clusters)
     
     def ubicacion_recomendacion(client, num_cluster):
         QUERY = (
