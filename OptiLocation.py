@@ -261,7 +261,7 @@ if selected=="Predicción":
 
     cliente_bq = instanciar_client()
     df_estandarizar = obtener_avg_stddev(cliente_bq)
-    #Rating_select, Densidad_Sitios_select = estandarizar(df_estandarizar, Rating_select, Densidad_Sitios_select)
+    Rating_select, Densidad_Sitios_select = estandarizar(df_estandarizar, Rating_select, Densidad_Sitios_select)
     columnas_dict = obtener_columnas(cliente_bq)
     columnas_select = cargar_datos(columnas_dict,Rating_select,Densidad_Sitios_select,estado_select,selected_categories)
     prediccion = consultar_modelo_ml(cliente_bq, columnas_select)
