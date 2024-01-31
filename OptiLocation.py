@@ -4,6 +4,7 @@ import json
 from streamlit_lottie import st_lottie
 from google.cloud import bigquery
 from google.oauth2 import service_account
+import pandas as pd
 from pathlib import Path
 from shapely.wkt import loads
 
