@@ -174,6 +174,10 @@ if selected=="Predicción":
 
 
     def estandarizar(df_avg_stddev, Rating_select, Densidad_Sitios_select):
+
+        st.write(Rating_select)
+        st.write(Densidad_Sitios_select)
+        
         if Densidad_Sitios_select == 1:
             Densidad_Sitios_select = 20
         elif Densidad_Sitios_select == 2:
@@ -185,7 +189,6 @@ if selected=="Predicción":
         else:
             Densidad_Sitios_select = 50
 
-        st.write(Rating_select)
         st.write(df_avg_stddev["avg_rating_avg"])
         st.write(df_avg_stddev["avg_rating_stddev"])
         
@@ -221,6 +224,8 @@ if selected=="Predicción":
             '(SELECT ' + columnas_select + '))'
         )
 
+        st.write(QUERY)
+        
         try:
             # Necesario instalar en modulo pandas para bq
             # pip install google-cloud-bigquery[pandas]
