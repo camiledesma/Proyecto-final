@@ -223,7 +223,7 @@ if selected=="Predicción":
             prediccion = client.query_and_wait(QUERY).to_dataframe()
             return prediccion
         except GoogleCloudError as e:
-            st.write(f"Error de Google Cloud al ejecutar la consulta en BigQuery: {e}")
+            st.error(f"Error de Google Cloud al ejecutar la consulta en BigQuery: {e}")
             # Puedes realizar acciones adicionales aquí, como registrar el error o manejarlo de manera específica
             # raise  # Propaga la excepción si es necesario
             return None  # Otra opción: devolver un valor específico para indicar que hubo un error
