@@ -179,15 +179,15 @@ if selected=="Predicción":
     def estandarizar(df_avg_stddev, Rating_select, Densidad_Sitios_select):
         
         if Densidad_Sitios_select == 1:
-            Densidad_Sitios_select = 20
+            Densidad_Sitios_select = 100
         elif Densidad_Sitios_select == 2:
-            Densidad_Sitios_select = 80
-        elif Densidad_Sitios_select == 3:
-            Densidad_Sitios_select = 200
-        elif Densidad_Sitios_select == 4:
             Densidad_Sitios_select = 500
+        elif Densidad_Sitios_select == 3:
+            Densidad_Sitios_select = 1500
+        elif Densidad_Sitios_select == 4:
+            Densidad_Sitios_select = 3000
         else:
-            Densidad_Sitios_select = 50
+            Densidad_Sitios_select = 250
 
         Rating_select = (Rating_select - df_avg_stddev["avg_rating_avg"].values[0])/df_avg_stddev["avg_rating_stddev"].values[0]
         Densidad_Sitios_select = (Densidad_Sitios_select - df_avg_stddev["num_sitios_avg"].values[0])/df_avg_stddev["num_sitios_stddev"].values[0]
